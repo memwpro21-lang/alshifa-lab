@@ -226,8 +226,10 @@ function goToStep(n) {
     if (n === 2) {
         const name = document.getElementById('patientName').value.trim();
         const phone = document.getElementById('phoneNumberInput').value.trim();
+        const age = Number(document.getElementById('patientAge').value);
         if (!name) { alert('يرجى إدخال اسم المريض.'); return; }
         if (phone.length < 10) { alert('يرجى إدخال رقم هاتف عراقي صحيح.'); return; }
+        if (!Number.isInteger(age) || age < 0 || age > 120) { alert('يرجى إدخال عمر صحيح بين 0 و120 سنة.'); return; }
     }
 
     for (let i = 1; i <= 3; i++) {
@@ -250,14 +252,12 @@ function submitFinalBooking() {
     const addr    = document.getElementById('addressText').value.trim() || 'قضاء المقدادية';
     const coords  = document.getElementById('geoCoordinates').value;
     const phone   = document.getElementById('phoneNumberInput').value.trim();
+    const age     = document.getElementById('patientAge').value.trim();
     const refCode = '#NOOR-' + Math.floor(1000 + Math.random() * 9000);
     const nowStr  = new Date().toLocaleString('ar-IQ');
 
-    // Render Canvas Ticket
-    renderCanvasTicket({ refCode, name, phone, pkg, date: `${date}`, time, addr, coords, nowStr });
-
-    // WhatsApp Message
-    const wa = encodeURIComponent(
+    const mapLink = buildMapLink(coords);
+    const whatsappMessage =
         `🏥 *مختبر نور الوسط الطبي*\n` +
         `📍 قضاء المقدادية - محافظة ديالى\n` +
         `👨‍⚕️ إدارة: منتظر صالح\n` +
@@ -265,18 +265,61 @@ function submitFinalBooking() {
         `📋 *بيانات حجز السحب المنزلي*\n` +
         `🔖 رمز الحجز: ${refCode}\n` +
         `👤 اسم المريض: ${name}\n` +
+        `🎂 العمر: ${age} سنة\n` +
         `📞 رقم الهاتف: ${phone}\n` +
         `💉 الباقة: ${pkg}\n` +
         `📅 التاريخ: ${date}\n` +
         `⏰ الوقت: ${time}\n` +
         `📍 العنوان: ${addr}\n` +
-        `🌐 الخريطة: https://maps.google.com/?q=${coords}\n` +
+        `🌐 موقع المنزل على الخريطة: ${mapLink}\n` +
         `━━━━━━━━━━━━━━━━━━\n` +
-        `✅ مرفق صورة بطاقة الحجز الرسمية`
-    );
-    document.getElementById('whatsappConfirmBtn').href = `https://wa.me/9647706976225?text=${wa}`;
+        `✅ بطاقة الحجز الرسمية مرفقة مع هذه الرسالة`;
+
+    const whatsappButton = document.getElementById('whatsappConfirmBtn');
+    whatsappButton.dataset.message = whatsappMessage;
+    whatsappButton.dataset.mapLink = mapLink;
 
     goToStep(3);
+    requestAnimationFrame(() => {
+        renderCanvasTicket({ refCode, name, age, phone, pkg, date: `${date}`, time, addr, coords, mapLink, nowStr });
+    });
+}
+
+function buildMapLink(coords) {
+    const normalizedCoords = String(coords || `${muqdadiyaCoords[0]},${muqdadiyaCoords[1]}`)
+        .replace(/\s+/g, '')
+        .replace(/،/g, ',');
+    return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(normalizedCoords)}`;
+}
+
+async function shareBookingOnWhatsApp() {
+    const button = document.getElementById('whatsappConfirmBtn');
+    const canvas = document.getElementById('ticketCanvas');
+    if (!button || !canvas) return;
+
+    const message = button.dataset.message || '';
+    const imageBlob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+    if (!imageBlob) {
+        alert('تعذر تجهيز صورة الحجز. يرجى إعادة المحاولة.');
+        return;
+    }
+
+    const file = new File([imageBlob], `بطاقة-حجز-نور-الوسط-${Date.now()}.png`, { type: 'image/png' });
+    if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+        try {
+            await navigator.share({
+                files: [file],
+                text: message,
+                title: 'بطاقة حجز مختبر نور الوسط'
+            });
+            return;
+        } catch (error) {
+            if (error.name === 'AbortError') return;
+        }
+    }
+
+    downloadTicketImage();
+    window.open(`https://wa.me/9647706976225?text=${encodeURIComponent(message)}%0A%0A📎%20تم%20تحميل%20صورة%20البطاقة،%20يرجى%20إرفاقها%20مع%20الرسالة.`, '_blank', 'noopener');
 }
 
 /* ==========================================
@@ -287,7 +330,7 @@ function renderCanvasTicket(d) {
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
     const W = canvas.width;   // 600
-    const H = canvas.height;  // 750
+    const H = canvas.height;  // 980
 
     // Background
     ctx.fillStyle = '#FFFFFF';
@@ -299,11 +342,11 @@ function renderCanvasTicket(d) {
     ctx.strokeRect(0.5, 0.5, W - 1, H - 1);
 
     // === HEADER GRADIENT ===
-    const hGrad = ctx.createLinearGradient(0, 0, W, 145);
+    const hGrad = ctx.createLinearGradient(0, 0, W, 170);
     hGrad.addColorStop(0,   '#0d9488');
     hGrad.addColorStop(1,   '#0284c7');
     ctx.fillStyle = hGrad;
-    ctx.fillRect(0, 0, W, 145);
+    ctx.fillRect(0, 0, W, 170);
 
     // Decorative circles in header
     ctx.save();
@@ -316,20 +359,20 @@ function renderCanvasTicket(d) {
     // Lab Name
     ctx.fillStyle = '#ffffff';
     ctx.textAlign = 'center';
-    ctx.font = 'bold 28px Cairo, sans-serif';
-    ctx.fillText('مختبر نور الوسط الطبي', W / 2, 48);
+    ctx.font = 'bold 31px Cairo, sans-serif';
+    ctx.fillText('مختبر نور الوسط الطبي', W / 2, 52);
 
     ctx.font = '700 15px Cairo, sans-serif';
     ctx.globalAlpha = 0.9;
-    ctx.fillText('محافظة ديالى - قضاء المقدادية  |  إدارة: منتظر صالح', W / 2, 80);
+    ctx.fillText('محافظة ديالى - قضاء المقدادية  |  إدارة: منتظر صالح', W / 2, 87);
 
     ctx.font = '600 13px Cairo, sans-serif';
     ctx.globalAlpha = 0.75;
-    ctx.fillText('أول مختبر يطلق خدمة السحب المنزلي المجاني في المقدادية', W / 2, 108);
+    ctx.fillText('خدمة السحب المنزلي المجاني - بطاقة حجز رسمية', W / 2, 120);
     ctx.globalAlpha = 1;
 
     // === REFERENCE CODE PILL ===
-    const pillY = 128;
+    const pillY = 135;
     const pillW = 280; const pillH = 34;
     const pillX = (W - pillW) / 2;
     ctx.fillStyle = 'rgba(255,255,255,0.22)';
@@ -343,6 +386,7 @@ function renderCanvasTicket(d) {
     // === SECTION: DATA ROWS ===
     const rows = [
         { icon: '👤', label: 'اسم المريض',          val: d.name },
+        { icon: '🎂', label: 'العمر',               val: `${d.age} سنة` },
         { icon: '📞', label: 'رقم الهاتف',          val: d.phone },
         { icon: '💉', label: 'الباقة / التحليل',    val: d.pkg },
         { icon: '📅', label: 'تاريخ الزيارة',       val: d.date },
@@ -350,8 +394,8 @@ function renderCanvasTicket(d) {
         { icon: '📍', label: 'الموقع والعنوان',      val: d.addr }
     ];
 
-    const startY = 175;
-    const rowH   = 72;
+    const startY = 190;
+    const rowH   = 78;
 
     rows.forEach((r, i) => {
         const y = startY + i * rowH;
@@ -359,33 +403,33 @@ function renderCanvasTicket(d) {
         // Row card background
         ctx.fillStyle = i % 2 === 0 ? '#f8fafc' : '#f0fdfa';
         ctx.beginPath();
-        ctx.roundRect(24, y, W - 48, 60, 10);
+        ctx.roundRect(24, y, W - 48, 66, 12);
         ctx.fill();
 
         // Left accent bar
-        const barGrad = ctx.createLinearGradient(24, y, 24, y + 60);
+        const barGrad =         ctx.createLinearGradient(24, y, 24, y + 66);
         barGrad.addColorStop(0, '#0d9488');
         barGrad.addColorStop(1, '#0284c7');
         ctx.fillStyle = barGrad;
         ctx.beginPath();
-        ctx.roundRect(24, y, 5, 60, [3, 0, 0, 3]);
+        ctx.roundRect(24, y, 6, 66, [3, 0, 0, 3]);
         ctx.fill();
 
         // Icon
         ctx.font = '22px serif';
         ctx.textAlign = 'right';
-        ctx.fillText(r.icon, W - 42, y + 38);
+        ctx.fillText(r.icon, W - 48, y + 40);
 
         // Label
         ctx.fillStyle = '#94a3b8';
         ctx.font = '700 13px Cairo, sans-serif';
-        ctx.fillText(r.label + ':', W - 70, y + 25);
+        ctx.fillText(r.label + ':', W - 82, y + 25);
 
         // Value
         ctx.fillStyle = '#0f172a';
         ctx.font = 'bold 15px Cairo, sans-serif';
-        const maxValW = W - 110;
-        const valX = W - 70;
+        const maxValW = W - 125;
+        const valX = W - 82;
 
         // Truncate long values
         let val = r.val;
@@ -395,7 +439,7 @@ function renderCanvasTicket(d) {
             }
             val += '...';
         }
-        ctx.fillText(val, valX, y + 46);
+        ctx.fillText(val, valX, y + 51);
     });
 
     // === DIVIDER ===
@@ -685,7 +729,12 @@ function initMobileNav() {
 function setDefaultBookingDate() {
     const el = document.getElementById('bookingDate');
     if (el) {
-        const today = new Date().toISOString().split('T')[0];
+        const now = new Date();
+        const today = [
+            now.getFullYear(),
+            String(now.getMonth() + 1).padStart(2, '0'),
+            String(now.getDate()).padStart(2, '0')
+        ].join('-');
         el.value = today;
         el.min   = today;
     }
