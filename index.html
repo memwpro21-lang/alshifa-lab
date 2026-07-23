@@ -123,7 +123,7 @@
             <!-- Hero Visual with 3D Animated Frame & Image -->
             <div class="hero-visual">
                 <div class="img-3d-frame float-animation">
-                    <img src="home_sampling.jpg" alt="السحب المنزلي في المقدادية - مختبر نور الوسط" class="hero-main-img">
+                    <img src="https://images.pexels.com/photos/356040/pexels-photo-356040.jpeg" alt="أجهزة وتقنيات مختبرية" class="hero-main-img">
                     <div class="img-overlay-card top-right">
                         <i class="fa-solid fa-circle-check text-success"></i> خدمة 24/7 للمقدادية
                     </div>
@@ -165,6 +165,30 @@
                     <h3>تثبيت الحجز والبدأ بالاجراءات</h3>
                     <p>يتم تحويل وتصميم تفاصيل حجزك إلى صورة بطاقة رسمية وأنيقة لتأكيد الطلب وإرسالها فوراً إلى الواتساب.</p>
                 </div>
+            </div>
+
+            <div class="service-gallery" aria-label="أجهزة وأدوات مختبر نور الوسط الطبي">
+                <article class="service-image-card">
+                    <img src="https://images.pexels.com/photos/6285355/pexels-photo-6285355.jpeg" alt="أدوات وأجهزة فحص مخبرية" loading="lazy">
+                    <div class="service-image-caption">
+                        <i class="fa-solid fa-microscope"></i>
+                        <span>مجاهر وأجهزة فحص دقيقة</span>
+                    </div>
+                </article>
+                <article class="service-image-card">
+                    <img src="https://images.pexels.com/photos/7298558/pexels-photo-7298558.jpeg" alt="أنابيب وأدوات سحب الدم" loading="lazy">
+                    <div class="service-image-caption">
+                        <i class="fa-solid fa-vials"></i>
+                        <span>أنابيب عينات وأدوات معقمة</span>
+                    </div>
+                </article>
+                <article class="service-image-card">
+                    <img src="https://images.pexels.com/photos/2280571/pexels-photo-2280571.jpeg" alt="أجهزة تحليل وأدوات مختبرية" loading="lazy">
+                    <div class="service-image-caption">
+                        <i class="fa-solid fa-flask-vial"></i>
+                        <span>أجهزة تحليل حديثة</span>
+                    </div>
+                </article>
             </div>
 
             <div class="cta-banner">
@@ -480,7 +504,7 @@
                             <i class="fa-solid fa-truck-medical"></i> طلب سحب منزلي
                         </button>
                         <a href="https://wa.me/9647706976225?text=%D8%B3%D9%84%D8%A7%D9%85%20%D8%B9%D9%84%D9%8A%D9%83%D9%85%D8%8C%20%D8%A3%D8%B1%D8%BA%D8%A8%20%D8%A8%D8%A7%D9%84%D8%A7%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1%20%D8%B9%D9%86%20%D9%81%D8%AD%D9%88%D8%B3%D8%A7%D8%AA%20%D9%85%D8%AE%D8%AA%D8%A8%D8%B1%20%D9%86%D9%88%D8%B1%20%D8%A7%D9%84%D9%88%D8%B3%D8%B7" target="_blank" class="btn btn-whatsapp">
-                            <i class="fa-brands fa-whatsapp"></i> تواصل عبر واتساب (07706976225)
+                            <i class="fa-brands fa-whatsapp"></i> تواصل عبر واتساب
                         </a>
                     </div>
                 </div>
@@ -595,6 +619,11 @@
                         </div>
 
                         <div class="form-group">
+                            <label for="patientAge"><i class="fa-solid fa-cake-candles"></i> عمر المريض</label>
+                            <input type="number" id="patientAge" min="0" max="120" inputmode="numeric" placeholder="العمر بالسنوات">
+                        </div>
+
+                        <div class="form-group">
                             <label for="selectedPackage"><i class="fa-solid fa-vials"></i> الباقة / الفحص المطلوب</label>
                             <select id="selectedPackage">
                                 <option value="الباقة الصحية الشاملة (25,000 د.ع)">الباقة الصحية الشاملة (25,000 د.ع) - 13 فحصاً</option>
@@ -609,7 +638,7 @@
                             <input type="date" id="bookingDate">
                         </div>
 
-                        <div class="form-group span-2">
+                        <div class="form-group">
                             <label for="bookingTime"><i class="fa-solid fa-clock"></i> الوقت المفضل للزيارة</label>
                             <select id="bookingTime">
                                 <option value="صباحاً (8:00 ص - 12:00 ظ)">صباحاً (8:00 ص - 12:00 ظ)</option>
@@ -665,12 +694,12 @@
                     <div class="success-icon-animation">
                         <i class="fa-solid fa-circle-check"></i>
                     </div>
-                    <h3 class="text-success">تم تثبيت الحجز بنجاح!</h3>
-                    <p class="ticket-subtitle">مختبر نور الوسط الطبي - إدارة منتظر صالح في خدمتكم.</p>
+                    <h3 class="text-primary">قم بتثبيت الحجز في الأسفل</h3>
+                    <p class="ticket-subtitle">راجع بيانات الحجز، ثم اضغط على زر تثبيت الحجز في الواتساب لإرسال الصورة والتفاصيل.</p>
 
                     <!-- Rendered HTML5 Canvas Image Container -->
                     <div class="ticket-image-wrapper mt-3 mb-3">
-                        <canvas id="ticketCanvas" width="600" height="750" class="ticket-canvas-img"></canvas>
+                        <canvas id="ticketCanvas" width="700" height="980" class="ticket-canvas-img"></canvas>
                     </div>
 
                     <div class="modal-actions justify-center flex-wrap gap-3">
@@ -679,10 +708,10 @@
                             <span>تحميل صورة البطاقة (PNG)</span>
                         </button>
 
-                        <a id="whatsappConfirmBtn" href="#" target="_blank" class="btn btn-whatsapp btn-lg">
+                        <button id="whatsappConfirmBtn" type="button" onclick="shareBookingOnWhatsApp()" class="btn btn-whatsapp btn-lg">
                             <i class="fa-brands fa-whatsapp"></i>
-                            <span>إرسال التفاصيل مع رابط الموقع للواتساب</span>
-                        </a>
+                            <span>تثبيت الحجز في الواتساب</span>
+                        </button>
                     </div>
                 </div>
             </div>
