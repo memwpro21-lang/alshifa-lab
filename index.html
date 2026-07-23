@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مختبر نور الوسط الطبي | السحب المنزلي والفحوصات الشاملة في المقدادية</title>
+    <meta name="description" content="مختبر نور الوسط الطبي في قضاء المقدادية - محافظة ديالى. أول مختبر يطلق خدمة السحب المنزلي المجاني. إدارة منتظر صالح. تواصل عبر 07706976225. تصميم وتطوير المبرمج محمد وائل.">
+    
+    <!-- Google Fonts: Cairo & Tajawal -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Leaflet CSS for Maps -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <!-- Custom Glowing Mouse Cursor -->
+    <div class="cursor-dot" id="cursorDot"></div>
+    <div class="cursor-glow" id="cursorGlow"></div>
+
+    <!-- 3D Three.js Background Canvas (Calm DNA & Medical Spheres) -->
+    <canvas id="canvas3d"></canvas>
+
+    <!-- Header / Navigation -->
+    <header class="navbar" id="navbar">
+        <div class="container nav-container">
+            <a href="#" class="brand-logo">
+                <div class="logo-icon-badge">
+                    <i class="fa-solid fa-microscope"></i>
+                </div>
+                <div class="brand-text">
+                    <span class="brand-name">مختبر <span>نور الوسط</span> الطبي</span>
+                    <span class="brand-sub">إدارة: منتظر صالح | المقدادية</span>
+                </div>
+            </a>
+
+            <nav class="nav-links" id="navLinks">
+                <a href="#hero" class="nav-link active" style="white-space:nowrap;">الرئيسية</a>
+                <a href="#home-sampling" class="nav-link highlight-link" style="white-space:nowrap;">
+                    <i class="fa-solid fa-house-medical"></i>&nbsp;السحب المنزلي
+                </a>
+                <a href="#packages" class="nav-link" style="white-space:nowrap;">العروض والباقات</a>
+                <a href="#tests" class="nav-link" style="white-space:nowrap;">دليل الفحوصات</a>
+                <a href="#why-us" class="nav-link" style="white-space:nowrap;">لماذا نحن؟</a>
+                <a href="#contact" class="nav-link" style="white-space:nowrap;">الموقع والتواصل</a>
+            </nav>
+
+            <div class="nav-actions">
+                <button class="btn btn-primary" onclick="openBookingModal()" style="white-space:nowrap;">
+                    <i class="fa-solid fa-truck-medical"></i>
+                    <span style="white-space:nowrap;">طلب سحب منزلي</span>
+                </button>
+                <button class="mobile-toggle" id="mobileToggle" aria-label="القائمة">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="hero" class="hero-section">
+        <div class="container hero-grid">
+            <div class="hero-content">
+                <div class="badge-pill">
+                    <span class="badge-pulse"></span>
+                    <i class="fa-solid fa-trophy"></i>
+                    <span>الأول في قضاء المقدادية</span>
+                </div>
+                <h1 class="hero-title">
+                    خدمة السحب المنزلي <br>
+                    تصلك حتى باب بيتك في <span class="text-gradient">المقدادية</span>
+                </h1>
+                <p class="hero-subtitle">
+                    مختبر نور الوسط الطبي برؤية حديثة تحت <strong>إدارة منتظر صالح</strong>. نفخر بكوننا <strong>أول مختبر يطلق خدمة السحب المنزلي المجاني</strong> بكادر متخصص وأحدث الأجهزة الطبية الدقيقة.
+                </p>
+
+                <div class="hero-cta-group">
+                    <button class="btn btn-primary btn-lg" onclick="openBookingModal()">
+                        <i class="fa-solid fa-truck-medical"></i>
+                        <span>احجز السحب المنزلي الآن</span>
+                    </button>
+                    <a href="https://wa.me/9647706976225" target="_blank" class="btn btn-whatsapp btn-lg">
+                        <i class="fa-brands fa-whatsapp"></i>
+                        <span>WhatsApp</span>
+                    </a>
+                </div>
+
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <div class="stat-icon"><i class="fa-solid fa-house-user"></i></div>
+                        <div class="stat-info">
+                            <span class="stat-number">100%</span>
+                            <span class="stat-label">سحب منزلي مجاني</span>
+                        </div>
+                    </div>
+                    <div class="stat-divider"></div>
+                    <div class="stat-item">
+                        <div class="stat-icon"><i class="fa-solid fa-clock-rotate-left"></i></div>
+                        <div class="stat-info">
+                            <span class="stat-number">سريعة</span>
+                            <span class="stat-label">نتائج رقمية بدقة</span>
+                        </div>
+                    </div>
+                    <div class="stat-divider"></div>
+                    <div class="stat-item">
+                        <div class="stat-icon"><i class="fa-solid fa-location-dot"></i></div>
+                        <div class="stat-info">
+                            <span class="stat-number">المقدادية</span>
+                            <span class="stat-label">محافظة ديالى</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hero Visual with 3D Animated Frame & Image -->
+            <div class="hero-visual">
+                <div class="img-3d-frame float-animation">
+                    <img src="images/home_sampling.jpg" alt="السحب المنزلي في المقدادية - مختبر نور الوسط" class="hero-main-img">
+                    <div class="img-overlay-card top-right">
+                        <i class="fa-solid fa-circle-check text-success"></i> خدمة 24/7 للمقدادية
+                    </div>
+                    <div class="img-overlay-card bottom-left">
+                        <i class="fa-solid fa-user-doctor text-teal"></i> إدارة: منتظر صالح
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Home Sampling Highlight Section -->
+    <section id="home-sampling" class="home-sampling-section">
+        <div class="container">
+            <div class="section-header text-center">
+                <span class="section-tag"><i class="fa-solid fa-star"></i> الخدمة الأولى من نوعها</span>
+                <h2 class="section-title">كيف تعمل خدمة السحب المنزلي؟</h2>
+                <p class="section-desc">أول مختبر في قضاء المقدادية يطلق هذه الخدمة لتصلك الخدمات الطبية إلى منزلك بكل راحة وسهولة.</p>
+            </div>
+
+            <div class="steps-grid">
+                <div class="step-card">
+                    <div class="step-num">01</div>
+                    <div class="step-icon"><i class="fa-solid fa-user-pen"></i></div>
+                    <h3>إدخال البيانات والمعلومات</h3>
+                    <p>أدخل اسم المريض ورقم هاتفك والباقة أو التحليل المطلوب وتاريخ الزيارة المناسب.</p>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-num">02</div>
+                    <div class="step-icon"><i class="fa-solid fa-map-location-dot"></i></div>
+                    <h3>تحديد موقعك في المقدادية</h3>
+                    <p>حدد مكان منزلك على الخريطة التفاعلية أو ضغطة زر عبر الـ GPS لتسهيل وصول الكادر.</p>
+                </div>
+
+                <div class="step-card highlight-step">
+                    <div class="step-num">03</div>
+                    <div class="step-icon"><i class="fa-solid fa-calendar-check"></i></div>
+                    <h3>تثبيت الحجز والبدأ بالاجراءات</h3>
+                    <p>يتم تحويل وتصميم تفاصيل حجزك إلى صورة بطاقة رسمية وأنيقة لتأكيد الطلب وإرسالها فوراً إلى الواتساب.</p>
+                </div>
+            </div>
+
+            <div class="cta-banner">
+                <div class="cta-content">
+                    <h3>هل تحتاج إلى سحب عينة دم لك أو لأحد أفراد عائلتك؟</h3>
+                    <p>خدمة السحب المنزلي مجانية بالكامل داخل قضاء المقدادية وضواحيها.</p>
+                </div>
+                <button class="btn btn-light btn-lg" onclick="openBookingModal()">
+                    <i class="fa-solid fa-truck-medical"></i>
+                    <span>احجز السحب المنزلي الآن</span>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Packages Section -->
+    <section id="packages" class="packages-section">
+        <div class="container">
+            <div class="section-header text-center">
+                <span class="section-tag"><i class="fa-solid fa-briefcase-medical"></i> عروض مختبر نور الوسط الطبي</span>
+                <h2 class="section-title">الباقات الصحية الشاملة والمخفضة</h2>
+                <p class="section-desc">اختر الباقة المناسبة لاحتياجاتك الصحية مع ميزة السحب المنزلي المجاني لجميع الباقات.</p>
+            </div>
+
+            <div class="packages-grid">
+                <!-- Package 1: Comprehensive Health -->
+                <div class="package-card-modern">
+                    <div class="pkg-header-banner teal-gradient">
+                        <div class="pkg-top-tag"><i class="fa-solid fa-heart-pulse"></i> الأكثر طلباً بالكامل</div>
+                        <h3 class="pkg-title">الباقة الصحية الشاملة</h3>
+                        <p class="pkg-subtitle">13 فحصاً رئيسياً ودقيقاً لتقييم صحة الجسم العامة</p>
+                        
+                        <div class="pkg-price-badge">
+                            <span class="val">25,000</span>
+                            <span class="curr">دينار عراقي</span>
+                        </div>
+                    </div>
+
+                    <div class="pkg-free-feature">
+                        <i class="fa-solid fa-house-medical text-teal"></i>
+                        <span>يتضمن هذا العرض: <strong>السحب المنزلي مجاناً</strong></span>
+                    </div>
+
+                    <div class="pkg-body-content">
+                        <h4 class="pkg-tests-heading"><i class="fa-solid fa-circle-check"></i> الفحوصات المضمنة (13 فحصاً):</h4>
+                        
+                        <div class="tests-compact-grid">
+                            <div class="test-item-chip">
+                                <span class="t-title">صورة الدم الكاملة (CBC)</span>
+                                <span class="t-purpose">تقييم صحة الدم، الأنيميا، والالتهابات</span>
+                            </div>
+                            <div class="test-item-chip">
+                                <span class="t-title">سكر الدم الصائم (FBS)</span>
+                                <span class="t-purpose">تشخيص ومتابعة مرض السكري</span>
+                            </div>
+                            <div class="test-item-chip">
+                                <span class="t-title">الكوليسترول الكلي (Cholesterol)</span>
+                                <span class="t-purpose">تقييم صحة القلب والأوعية</span>
+                            </div>
+                            <div class="test-item-chip">
+                                <span class="t-title">الدهون الثلاثية (TRIG)</span>
+                                <span class="t-purpose">تقييم مستوى الشحوم بالدم</span>
+                            </div>
+                            <div class="test-item-chip">
+                                <span class="t-title">الدهون الجيدة والضارة (HDL / LDL / VLDL)</span>
+                                <span class="t-purpose">فحص شامل لصحة الشرايين</span>
+                            </div>
+                            <div class="test-item-chip">
+                                <span class="t-title">حمض اليوريك (Uric Acid)</span>
+                                <span class="t-purpose">الكشف عن داء النقرس</span>
+                            </div>
+                            <div class="test-item-chip">
+                                <span class="t-title">وظائف الكلى (BU / CR)</span>
+                                <span class="t-purpose">تقييم كفاءة عمل الكليتين</span>
+                            </div>
+                            <div class="test-item-chip">
+                                <span class="t-title">الكالسيوم الكلي (Ca)</span>
+                                <span class="t-purpose">صحة العظام والأسنان</span>
+                            </div>
+                            <div class="test-item-chip">
+                                <span class="t-title">البيليروبين (أبو صفار - TSB)</span>
+                                <span class="t-purpose">تقييم صحة الكبد واليرقان</span>
+                            </div>
+                            <div class="test-item-chip">
+                                <span class="t-title">سرعة ترسيب الدم (ESR)</span>
+                                <span class="t-purpose">مؤشر عام لوجود الالتهابات</span>
+                            </div>
+                            <div class="test-item-chip">
+                                <span class="t-title">جرثومة المعدة (H. pylori)</span>
+                                <span class="t-purpose">الكشف عن بكتيريا المعدة الحلزونية</span>
+                            </div>
+                            <div class="test-item-chip">
+                                <span class="t-title">تحليل البول الشامل (GUE)</span>
+                                <span class="t-purpose">صحة المسالك البولية والكلى</span>
+                            </div>
+                            <div class="test-item-chip">
+                                <span class="t-title">تحليل البراز الشامل (GSE)</span>
+                                <span class="t-purpose">الكشف عن الطفيليات والهضم</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pkg-footer-actions">
+                        <button class="btn btn-primary btn-block btn-lg" onclick="selectPackageAndBook('الباقة الصحية الشاملة', '25,000 د.ع')">
+                            <i class="fa-solid fa-calendar-check"></i>
+                            <span>احجز الباقة الشاملة (25,000 د.ع)</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Package 2: Vitamins & Elements -->
+                <div class="package-card-modern featured-pkg">
+                    <div class="pkg-header-banner cyan-gradient">
+                        <div class="pkg-top-tag cyan"><i class="fa-solid fa-capsules"></i> العناية المتقدمة بالفيتامينات</div>
+                        <h3 class="pkg-title">باقة الفيتامينات والعناصر</h3>
+                        <p class="pkg-subtitle">6 فحوصات حيوية لتقييم نقص الفيتامينات والحديد والمناعة والشعر</p>
+                        
+                        <div class="pkg-price-badge cyan">
+                            <span class="val">50,000</span>
+                            <span class="curr">دينار عراقي</span>
+                        </div>
+                    </div>
+
+                    <div class="pkg-free-feature">
+                        <i class="fa-solid fa-house-medical text-cyan"></i>
+                        <span>يتضمن هذا العرض: <strong>السحب المنزلي مجاناً</strong></span>
+                    </div>
+
+                    <div class="pkg-body-content">
+                        <h4 class="pkg-tests-heading"><i class="fa-solid fa-circle-check"></i> الفحوصات المضمنة (6 فحوصات):</h4>
+                        
+                        <div class="tests-compact-grid">
+                            <div class="test-item-chip">
+                                <span class="t-title">فيتامين B12</span>
+                                <span class="t-purpose">تكوين خلايا الدم وصحة الأعصاب والطاقة</span>
+                            </div>
+                            <div class="test-item-chip">
+                                <span class="t-title">فيتامين D3</span>
+                                <span class="t-purpose">دعم العظام والمناعة وامتصاص الكالسيوم</span>
+                            </div>
+                            <div class="test-item-chip">
+                                <span class="t-title">مخزون الحديد (Ferritin)</span>
+                                <span class="t-purpose">تقييم مخزون الحديد وتأكيد نوع الأنيميا</span>
+                            </div>
+                            <div class="test-item-chip">
+                                <span class="t-title">عنصر الزنك (Zinc - Zn)</span>
+                                <span class="t-purpose">دعم المناعة، التئام الجروح، وصحة الشعر</span>
+                            </div>
+                            <div class="test-item-chip">
+                                <span class="t-title">عنصر الكالسيوم (Calcium - Ca)</span>
+                                <span class="t-purpose">ضروري للعظام والأسنان والعضلات</span>
+                            </div>
+                            <div class="test-item-chip">
+                                <span class="t-title">صورة الدم الكاملة (CBC)</span>
+                                <span class="t-purpose">فحص شامل لكريات الدم والصفائح</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pkg-footer-actions">
+                        <button class="btn btn-teal btn-block btn-lg" onclick="selectPackageAndBook('باقة الفيتامينات والعناصر', '50,000 د.ع')">
+                            <i class="fa-solid fa-calendar-check"></i>
+                            <span>احجز باقة الفيتامينات (50,000 د.ع)</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Comparison Table Section -->
+            <div class="comparison-box mt-5">
+                <h3 class="text-center mb-4"><i class="fa-solid fa-code-compare"></i> مقارنة سريعة بين الباقات</h3>
+                <div class="table-responsive">
+                    <table class="comparison-table">
+                        <thead>
+                            <tr>
+                                <th>الباقة</th>
+                                <th>السعر</th>
+                                <th>عدد الفحوصات</th>
+                                <th>مناسبة لـ</th>
+                                <th>السحب المنزلي</th>
+                                <th>الإجراء</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>الباقة الصحية الشاملة</strong></td>
+                                <td><span class="tag-price">25,000 د.ع</span></td>
+                                <td>13 فحصاً</td>
+                                <td>الفحص الدوري الشامل للجسم والاطمئنان</td>
+                                <td><span class="badge-free"><i class="fa-solid fa-check"></i> مجاناً</span></td>
+                                <td><button class="btn btn-sm btn-outline" onclick="selectPackageAndBook('الباقة الصحية الشاملة', '25,000 د.ع')">احجز</button></td>
+                            </tr>
+                            <tr>
+                                <td><strong>باقة الفيتامينات والعناصر</strong></td>
+                                <td><span class="tag-price gold">50,000 د.ع</span></td>
+                                <td>6 فحوصات دقيقة</td>
+                                <td>تقييم تساقط الشعر، الإرهاق، ونقص الفيتامينات ومعادن الدم</td>
+                                <td><span class="badge-free"><i class="fa-solid fa-check"></i> مجاناً</span></td>
+                                <td><button class="btn btn-sm btn-outline" onclick="selectPackageAndBook('باقة الفيتامينات والعناصر', '50,000 د.ع')">احجز</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Test Search & Guide Section -->
+    <section id="tests" class="tests-section bg-light">
+        <div class="container">
+            <div class="section-header text-center">
+                <span class="section-tag"><i class="fa-solid fa-magnifying-glass"></i> دليل التحاليل الفردية</span>
+                <h2 class="section-title">ابحث عن الفحص الذي تحتاجه</h2>
+                <p class="section-desc">يمكنك البحث باسم الفحص أو رمز الاختصار لمعرفة الغرض منه والباقة التي يتضمنها.</p>
+            </div>
+
+            <div class="search-bar-wrapper">
+                <div class="search-input-box">
+                    <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                    <input type="text" id="testSearchInput" placeholder="ابحث باسم التحليل (مثال: فيتامين د، CBC، جرثومة المعدة...)" oninput="filterTests()">
+                    <button class="clear-search-btn" id="clearSearch" onclick="clearTestSearch()"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+            </div>
+
+            <div class="tests-grid" id="testsGrid">
+                <!-- Dynamically populated via JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Us Section -->
+    <section id="why-us" class="why-us-section">
+        <div class="container">
+            <div class="section-header text-center">
+                <span class="section-tag"><i class="fa-solid fa-award"></i> الجودة والتميز</span>
+                <h2 class="section-title">لماذا تختار مختبر نور الوسط الطبي؟</h2>
+                <p class="section-desc">نلتزم بأعلى معايير الجودة الطبية والسرعة والدقة في قضاء المقدادية.</p>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-box">
+                    <div class="feat-icon"><i class="fa-solid fa-house-medical-flag"></i></div>
+                    <h3>أول سحب منزلي بالمقدادية</h3>
+                    <p>سباقون في تقديم خدمة السحب المنزلي المجاني لراحة كبار السن والمرضى والأسر.</p>
+                </div>
+
+                <div class="feature-box">
+                    <div class="feat-icon"><i class="fa-solid fa-microscope"></i></div>
+                    <h3>أحدث الأجهزة التشخيصية</h3>
+                    <p>نستخدم تقنيات وأجهزة فحص أوتوماتيكية متطورة تضمن نتائج دقيقة بنسبة عالية جداً.</p>
+                </div>
+
+                <div class="feature-box">
+                    <div class="feat-icon"><i class="fa-solid fa-user-doctor"></i></div>
+                    <h3>إدارة طبيّة متخصصة</h3>
+                    <p>تحت إشراف وإدارة <strong>منتظر صالح</strong>، نضمن المتابعة الدقيقة لكل تحليل وعينة.</p>
+                </div>
+
+                <div class="feature-box">
+                    <div class="feat-icon"><i class="fa-brands fa-whatsapp"></i></div>
+                    <h3>إرسال النتائج واتساب</h3>
+                    <p>استلم نتائج تحاليلك عبر الواتساب بصيغة PDF عالية الدقة بدون الحاجة للانتظار بالمختبر.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Location & Contact Section -->
+    <section id="contact" class="contact-section">
+        <div class="container">
+            <div class="contact-grid">
+                <div class="contact-info">
+                    <span class="section-tag"><i class="fa-solid fa-location-dot"></i> نرحب بكم دائماً</span>
+                    <h2 class="section-title">موقعنا في قضاء المقدادية</h2>
+                    <p class="section-desc">مختبر نور الوسط الطبي يقع في موقع متميز وسهل الوصول في محافظة ديالى - قضاء المقدادية.</p>
+
+                    <div class="contact-details-list">
+                        <div class="c-detail-item">
+                            <div class="c-icon"><i class="fa-solid fa-location-pin"></i></div>
+                            <div class="c-text">
+                                <strong>العنوان:</strong>
+                                <span>محافظة ديالى - قضاء المقدادية - الشارع الرئيسي</span>
+                            </div>
+                        </div>
+
+                        <div class="c-detail-item">
+                            <div class="c-icon"><i class="fa-solid fa-user-shield"></i></div>
+                            <div class="c-text">
+                                <strong>إدارة المختبر:</strong>
+                                <span>منتظر صالح</span>
+                            </div>
+                        </div>
+
+                        <div class="c-detail-item">
+                            <div class="c-icon"><i class="fa-solid fa-clock"></i></div>
+                            <div class="c-text">
+                                <strong>أوقات العمل:</strong>
+                                <span>يومياً من الساعة 8:00 صباحاً حتى 9:00 مساءً</span>
+                            </div>
+                        </div>
+
+                        <div class="c-detail-item">
+                            <div class="c-icon"><i class="fa-solid fa-phone"></i></div>
+                            <div class="c-text">
+                                <strong>هاتف التواصل والواتساب:</strong>
+                                <span>07706976225</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="contact-actions mt-4">
+                        <button class="btn btn-primary" onclick="openBookingModal()">
+                            <i class="fa-solid fa-truck-medical"></i> طلب سحب منزلي
+                        </button>
+                        <a href="https://wa.me/9647706976225?text=%D8%B3%D9%84%D8%A7%D9%85%20%D8%B9%D9%84%D9%8A%D9%83%D9%85%D8%8C%20%D8%A3%D8%B1%D8%BA%D8%A8%20%D8%A8%D8%A7%D9%84%D8%A7%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1%20%D8%B9%D9%86%20%D9%81%D8%AD%D9%88%D8%B3%D8%A7%D8%AA%20%D9%85%D8%AE%D8%AA%D8%A8%D8%B1%20%D9%86%D9%88%D8%B1%20%D8%A7%D9%84%D9%88%D8%B3%D8%B7" target="_blank" class="btn btn-whatsapp">
+                            <i class="fa-brands fa-whatsapp"></i> تواصل عبر واتساب (07706976225)
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Interactive Leaflet Map Box -->
+                <div class="map-wrapper">
+                    <div class="map-card-header">
+                        <span><i class="fa-solid fa-map"></i> خريطة تفاعلية - المقدادية</span>
+                        <span class="pulse-indicator">مفتوح الآن</span>
+                    </div>
+                    <div id="mainMap" class="main-map-container"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container footer-content">
+            <div class="footer-brand">
+                <div class="brand-logo">
+                    <div class="logo-icon-badge"><i class="fa-solid fa-microscope"></i></div>
+                    <div class="brand-text">
+                        <span class="brand-name">مختبر نور الوسط الطبي</span>
+                        <span class="brand-sub">إدارة منتظر صالح - قضاء المقدادية</span>
+                    </div>
+                </div>
+                <p class="footer-desc">أول مختبر يطلق خدمة السحب المنزلي المجاني في قضاء المقدادية بمحافظة ديالى. دقة تشخيصية عالية ورعاية متميزة.</p>
+            </div>
+
+            <div class="footer-links">
+                <h4>روابط سريعة</h4>
+                <ul>
+                    <li><a href="#hero">الرئيسية</a></li>
+                    <li><a href="#home-sampling">السحب المنزلي</a></li>
+                    <li><a href="#packages">الباقات والعروض</a></li>
+                    <li><a href="#tests">دليل الفحوصات</a></li>
+                    <li><a href="#contact">الموقع والتواصل</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-contact">
+                <h4>تواصل معنا</h4>
+                <p><i class="fa-solid fa-location-dot"></i> ديالى - قضاء المقدادية</p>
+                <p><i class="fa-solid fa-user-doctor"></i> إدارة: منتظر صالح</p>
+                <p><i class="fa-solid fa-phone"></i> 07706976225</p>
+            </div>
+        </div>
+        
+        <div class="footer-bottom text-center">
+            <p>جميع الحقوق محفوظة © 2026 - مختبر نور الوسط الطبي</p>
+            <div class="developer-credit-pill">
+                <i class="fa-solid fa-code"></i>
+                <span>تصميم وتطوير المبرمج <strong>محمد وائل</strong></span>
+            </div>
+        </div>
+    </footer>
+
+
+    <!-- STREAMLINED BOOKING MODAL WITH FORMATTED CANVAS TICKET GENERATOR -->
+    <div class="modal-backdrop" id="bookingModal">
+        <div class="modal-box modal-lg">
+            <button class="modal-close" onclick="closeBookingModal()"><i class="fa-solid fa-xmark"></i></button>
+
+            <!-- Modal Header -->
+            <div class="modal-header-banner">
+                <div class="modal-header-icon"><i class="fa-solid fa-house-medical"></i></div>
+                <div>
+                    <h3 class="modal-title">حجز خدمة السحب المنزلي المجاني</h3>
+                    <p class="modal-subtitle">مختبر نور الوسط الطبي - المقدادية (إدارة منتظر صالح)</p>
+                </div>
+            </div>
+
+            <!-- Stepper Progress Bar -->
+            <div class="stepper-bar">
+                <div class="step-indicator active" id="stepInd1">
+                    <div class="circle">1</div>
+                    <span>البيانات والموعد</span>
+                </div>
+                <div class="step-line"></div>
+                <div class="step-indicator" id="stepInd2">
+                    <div class="circle">2</div>
+                    <span>تحديد الموقع</span>
+                </div>
+                <div class="step-line"></div>
+                <div class="step-indicator" id="stepInd3">
+                    <div class="circle">3</div>
+                    <span>تثبيت الحجز</span>
+                </div>
+            </div>
+
+            <div class="modal-body">
+                <!-- STEP 1: Patient Details & Phone -->
+                <div class="step-pane active" id="stepPane1">
+                    <div class="step-instruction mb-3">
+                        <h4>أدخل معلومات المريض والموعد</h4>
+                        <p>سيقوم كادرنا الطبي بالتواصل معك وتصلك الخدمة إلى منزلك مجاناً.</p>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="patientName"><i class="fa-solid fa-user"></i> اسم المريض الكامل</label>
+                            <input type="text" id="patientName" placeholder="أدخل الاسم">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="phoneNumberInput"><i class="fa-solid fa-phone"></i> رقم الهاتف (العراق)</label>
+                            <div class="phone-input-group">
+                                <span class="country-prefix">+964</span>
+                                <input type="tel" id="phoneNumberInput" placeholder="0770XXXXXXX" maxlength="11">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="selectedPackage"><i class="fa-solid fa-vials"></i> الباقة / الفحص المطلوب</label>
+                            <select id="selectedPackage">
+                                <option value="الباقة الصحية الشاملة (25,000 د.ع)">الباقة الصحية الشاملة (25,000 د.ع) - 13 فحصاً</option>
+                                <option value="باقة الفيتامينات والعناصر (50,000 د.ع)">باقة الفيتامينات والعناصر (50,000 د.ع) - 6 فحوصات</option>
+                                <option value="فحص سكر وصورة دم CBC">فحص سكر وصورة دم CBC</option>
+                                <option value="فحوصات فردية مخصصة">فحوصات فردية مخصصة</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="bookingDate"><i class="fa-solid fa-calendar-day"></i> موعد الزيارة المنزلية</label>
+                            <input type="date" id="bookingDate">
+                        </div>
+
+                        <div class="form-group span-2">
+                            <label for="bookingTime"><i class="fa-solid fa-clock"></i> الوقت المفضل للزيارة</label>
+                            <select id="bookingTime">
+                                <option value="صباحاً (8:00 ص - 12:00 ظ)">صباحاً (8:00 ص - 12:00 ظ)</option>
+                                <option value="ظهراً (12:00 ظ - 4:00 عصراً)">ظهراً (12:00 ظ - 4:00 عصراً)</option>
+                                <option value="مساءً (4:00 عصراً - 8:00 مساءً)">مساءً (4:00 عصراً - 8:00 مساءً)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="modal-actions text-left mt-4">
+                        <button class="btn btn-primary btn-lg" onclick="goToStep(2)">
+                            <span>التالي: تحديد الموقع</span>
+                            <i class="fa-solid fa-arrow-left"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- STEP 2: Interactive Map Location -->
+                <div class="step-pane" id="stepPane2">
+                    <div class="step-instruction mb-3">
+                        <h4>تحديد موقع المنزل في قضاء المقدادية</h4>
+                        <p>انقر على الخريطة لتحديد مكان المنزل أو استخدم زر الـ GPS التلقائي.</p>
+                    </div>
+
+                    <div class="location-picker-section">
+                        <div class="picker-header mb-2">
+                            <label><i class="fa-solid fa-map-pin"></i> اختر الموقع دقيقاً على الخريطة</label>
+                            <button class="btn btn-sm btn-outline" onclick="detectCurrentLocation()">
+                                <i class="fa-solid fa-crosshairs"></i> تحديد موقعي الـ GPS تلقائياً
+                            </button>
+                        </div>
+
+                        <div id="modalMap" class="modal-map-container"></div>
+                        <input type="hidden" id="geoCoordinates" value="33.9786, 44.9372">
+
+                        <div class="form-group mt-3">
+                            <label for="addressText"><i class="fa-solid fa-pen"></i> وصف أو عنوان إضافي</label>
+                            <input type="text" id="addressText" placeholder="مثال: قضاء المقدادية - قرب جامع / محلة...">
+                        </div>
+                    </div>
+
+                    <div class="modal-actions justify-between mt-4">
+                        <button class="btn btn-secondary" onclick="goToStep(1)">السابق</button>
+                        <button class="btn btn-primary btn-lg" onclick="submitFinalBooking()">
+                            <span>تثبيت الحجز والبدأ بالإجراءات</span>
+                            <i class="fa-solid fa-calendar-check"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- STEP 3: Ticket Preview & WhatsApp Text + Map Link -->
+                <div class="step-pane text-center" id="stepPane3">
+                    <div class="success-icon-animation">
+                        <i class="fa-solid fa-circle-check"></i>
+                    </div>
+                    <h3 class="text-success">تم تثبيت الحجز بنجاح!</h3>
+                    <p class="ticket-subtitle">مختبر نور الوسط الطبي - إدارة منتظر صالح في خدمتكم.</p>
+
+                    <!-- Rendered HTML5 Canvas Image Container -->
+                    <div class="ticket-image-wrapper mt-3 mb-3">
+                        <canvas id="ticketCanvas" width="600" height="750" class="ticket-canvas-img"></canvas>
+                    </div>
+
+                    <div class="modal-actions justify-center flex-wrap gap-3">
+                        <button class="btn btn-primary btn-lg" onclick="downloadTicketImage()">
+                            <i class="fa-solid fa-download"></i>
+                            <span>تحميل صورة البطاقة (PNG)</span>
+                        </button>
+
+                        <a id="whatsappConfirmBtn" href="#" target="_blank" class="btn btn-whatsapp btn-lg">
+                            <i class="fa-brands fa-whatsapp"></i>
+                            <span>إرسال التفاصيل مع رابط الموقع للواتساب</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- External JS Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="script.js"></script>
+</body>
+</html>
